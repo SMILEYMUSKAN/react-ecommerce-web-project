@@ -20,7 +20,7 @@ var AuthenticationView = ({ isLogin }) => {
   }, [isLogin])
 
   return (
-    <div className="bg-slate-900 max-w-lg mt-4 flex flex-col items-center justify-start mx-auto">
+    <div className="bg-slate-900 max-w-lg mt-4 flex flex-col items-center justify-start mx-auto rounded">
       <form onSubmit={HandleAuthentication} className="flex flex-col gap-5">
         <h1 className="text-4xl text-white italic w-full underline text-center">
           {title}
