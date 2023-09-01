@@ -1,31 +1,56 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import { Api_Endpoint } from "../Contants";
 
-var AppContext = createContext({
-    productList:[],
-    loading: true
+export var AppContext = createContext({
+  productList: [],
+  loading: true,
 });
 
 var AppProvider = ({ children }) => {
-var [productList, setproductList] = useState([]);
-var [loading, setLoading]         = useState(true);
+  var [productList, setproductList] = useState([]);
+  var [loading, setLoading] = useState(true);
+  var [cartItems, setCartItems] = useState([]);
 
-useEffect(() => {
+  useEffect(() => {
     fetch(Api_Endpoint.ProductsAPI)
-    .then(res => res.json())
-    .then(res => setproductList(res.products))
-}, [])
+      .then((res) => res.json())
+      .then((res) => setproductList(res.products));
+  }, []);
 
-return <AppContext.Provider value={{
-    productList,
-    setLoading,
-    loading
-}}>
+  var HandleAddToCart = (product) => {
+    var addToCartProduct = cartItems.find(
+      (cartProduct) => cartProduct.id == product.id
+    );
 
- { children }
-</AppContext.Provider>
-}
+    if (!addToCartProduct) {
+      addToCartProduct = product;
+      addToCartProduct.quantity = 1;
+    } else {
+      addToCartProduct.quantity++;
+    }
 
-export var useAppContext = () => useContext( AppContext );
+    var FilterProduct = cartItems.filter(
+      (cartproduct) => cartproduct.id != product.id
+    );
+    setCartItems([...FilterProduct, addToCartProduct]);
+
+    console.log(":: PRODUCT ADDED ::", addToCartProduct);
+  };
+
+  return (
+    <AppContext.Provider
+      value={{
+        productList,
+        setLoading,
+        loading,
+        HandleAddToCart,
+        cartItems,
+      }}
+    >
+      {children}
+    </AppContext.Provider>
+  );
+};
+
+export var useAppContext = () => useContext(AppContext);
 export default AppProvider;
-

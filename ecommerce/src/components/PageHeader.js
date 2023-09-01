@@ -1,8 +1,10 @@
+import { useAppContext } from "../context/AppProvider";
 import { useUserContext } from "../context/UserProvider";
 import PageLink from "./PageLinks";
 
 var PageHeader = () => {
-  var { user } = useUserContext()
+  var { user } = useUserContext();
+  var { cartItems } = useAppContext();
   return (
     <div className="bg-slate-900 p-2">
       <header className="flex justify-between">
@@ -14,15 +16,23 @@ var PageHeader = () => {
           <div className="hover:text-slate-400">
             <PageLink to="/products">Products</PageLink>
           </div>
-         {user ? <div>{user.email} <PageLink to="/logout">Logout</PageLink></div> : <>
-         <div className="hover:text-slate-400">
-            <PageLink to="/login">Login</PageLink>
-          </div>
-          <div className="hover:text-slate-400">
-            <PageLink to="/signUp">Sign Up</PageLink>
-          </div>
-         </>}
-          
+          {user ? (
+            <div>
+              {user.email} <PageLink to="/logout">Logout</PageLink>
+            </div>
+          ) : (
+            <>
+              <div className="hover:text-slate-400">
+                <PageLink to="/login">Login</PageLink>
+              </div>
+              <div className="hover:text-slate-400">
+                <PageLink to="/signUp">Sign Up</PageLink>
+              </div>
+              <div>
+                <PageLink to="/cart">My Cart ({cartItems.length})</PageLink>
+              </div>
+            </>
+          )}
         </nav>
       </header>
     </div>
