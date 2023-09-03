@@ -1,40 +1,43 @@
 import React, { Component } from "react";
 import { AppContext } from "../context/AppProvider";
+import CartDetails from "./CartItemsDetails";
 
 class CartItems extends Component {
   render() {
     return (
-      <section className="w-full flex flex-col items-center">
-        <h1 className="m-5 italic text-slate-900 text-3xl underline">
+      <section className="container mx-auto py-4">
+        <h1 className="mb-4 italic text-slate-900 text-3xl underline text-center">
           Cart Items
         </h1>
         <AppContext.Consumer>
-          {({ cartItems }) => (
-            <table className="border m-3 w-1/2 mx-auto px-3 py-5">
-              <thead className="bg-slate-900 text-white italic rounded">
-                <tr className="p-5">
-                  <th>Product Name</th>
-                  <th>Quantity</th>
-                  <th>Per Price</th>
-                  <th>Total Price</th>
-                </tr>
-              </thead>
-              <tbody className="text-center">
-                {cartItems.map((item) => (
-                  <tr key={item.id} className="m-3">
-                    <td>{item.title}</td>
-                    <td>{item.quantity}</td>
-                    <td>{item.price}</td>
-                    <td>{item.quantity * item.price}</td>
-                  </tr>
+          {({ allCartItems, cartCount, totalCartPrice }) => {
+            return cartCount > 0 ? (
+              <div className="">
+                {allCartItems.map((product) => (
+                  <CartDetails product={product} key={product.id} />
                 ))}
-              </tbody>
-            </table>
-          )}
+                <h1 className="text-lg font-semibold mt-4">
+                  Total : ${totalCartPrice}{" "}
+                </h1>
+                <button className="bg-slate-700 rounded px-2 py-2 mt-5 text-white hover:bg-slate-900">
+                  Proceed to checkout
+                </button>
+              </div>
+            ) : (
+              <p className="text-center mt-8 italic text-lg">
+                Your Cart Is Empty....
+              </p>
+            );
+          }}
         </AppContext.Consumer>
       </section>
     );
   }
 }
 
+/*
+<div>
+            {allCartItems.map((product) => <CartDetails product={ product }/>)}
+            </div>
+*/
 export default CartItems;

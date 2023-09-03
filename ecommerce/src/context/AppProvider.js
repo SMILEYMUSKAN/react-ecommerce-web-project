@@ -9,7 +9,7 @@ export var AppContext = createContext({
 var AppProvider = ({ children }) => {
   var [productList, setproductList] = useState([]);
   var [loading, setLoading] = useState(true);
-  var [cartItems, setCartItems] = useState([]);
+  var [cartItems, setCartItems] = useState({});
 
   useEffect(() => {
     fetch(Api_Endpoint.ProductsAPI)
@@ -18,24 +18,31 @@ var AppProvider = ({ children }) => {
   }, []);
 
   var HandleAddToCart = (product) => {
-    var addToCartProduct = cartItems.find(
-      (cartProduct) => cartProduct.id == product.id
-    );
-
-    if (!addToCartProduct) {
-      addToCartProduct = product;
-      addToCartProduct.quantity = 1;
+    var cartProduct = cartItems[product.id];
+    if (!cartProduct) {
+      cartProduct = product;
+      cartProduct.quantity = 1;
     } else {
-      addToCartProduct.quantity++;
+      cartProduct.quantity++;
     }
 
-    var FilterProduct = cartItems.filter(
-      (cartproduct) => cartproduct.id != product.id
-    );
-    setCartItems([...FilterProduct, addToCartProduct]);
+    cartProduct.totalPrice = cartProduct.quantity * cartProduct.price;
 
-    console.log(":: PRODUCT ADDED ::", addToCartProduct);
+    setCartItems({ ...cartItems, [product.id]: cartProduct });
+    console.log(cartItems, ":: I'M cartItems FROM APP PROVIDER ::");
   };
+
+  var allCartItems = Object.values(cartItems);
+  var cartCount = allCartItems.length;
+  var totalCartPrice = 0;
+  allCartItems.forEach((product) => {
+    totalCartPrice = totalCartPrice + product.totalPrice;
+  });
+
+  var productById = {};
+  productList.forEach((product) => {
+    productById[product.id] = product;
+  });
 
   return (
     <AppContext.Provider
@@ -44,7 +51,11 @@ var AppProvider = ({ children }) => {
         setLoading,
         loading,
         HandleAddToCart,
+        allCartItems,
+        cartCount,
         cartItems,
+        productById,
+        totalCartPrice,
       }}
     >
       {children}

@@ -4,8 +4,8 @@ var ProductView = ({ match }) => {
   var {
     params: { id },
   } = match;
-  var { productList, HandleAddToCart } = useAppContext();
-  var product = productList.find((products) => products.id == id);
+  var { productById, HandleAddToCart, cartItems } = useAppContext();
+  var product = productById[id];
 
   if (!product) return <div>Product Not Found!</div>;
   var { title, price, description, images } = product;
@@ -15,12 +15,17 @@ var ProductView = ({ match }) => {
     HandleAddToCart(product);
   };
 
+  var cartProduct = cartItems[id];
+
   return (
     <div className="container mx-auto px-4 py-6 border">
       <div className="flex gap-10">
         <img src={firstProductImg} alt={title} className="w-80 rounded-lg " />
         <div className="flex flex-col gap-3">
-          <h1 className="font-semibold italic text-2xl ">{title}</h1>
+          <h1 className="font-semibold italic text-2xl ">
+            {title} | {cartProduct ? cartProduct.quantity : 0}
+          </h1>
+
           <p className="italic text-lg">{description}</p>
           <p className="font-semibold italic text-2xl">$ {price}</p>
           <button
