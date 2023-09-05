@@ -5,6 +5,7 @@ import ProductView from "./components/ProductView";
 import AuthenticationView from "./components/AthenticationView";
 import LogOut from "./components/LogOut";
 import CartItems from "./components/CartItems";
+import CheckOut from "./components/CheckOut";
 
 var AppRouter = () => {
   return (
@@ -25,6 +26,7 @@ var AppRouter = () => {
         <Route path="/product/:id" component={ProductView} />
         <Route path="/logout" component={LogOut} />
         <Route path="/cart" component={CartItems} />
+        <Route path="/checkout" component={CheckOut} />
       </Switch>
     </div>
   );

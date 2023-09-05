@@ -5,28 +5,42 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { firebaseApp } from "../firebase";
+import { useHistory }  from "react-router-dom";
 
 var UserContext = createContext({
   user: null,
   error: null,
 });
 
+var APP_USER = "APP_USER"
+
 var UserProvider = ({ children }) => {
-  var [user, setUser] = useState(null);
+  var localUser = localStorage.getItem(APP_USER)
+  var [user, setUser] = useState(localUser ? JSON.parse(localUser) : null);
   var [error, setError] = useState(null);
   var auth = getAuth(firebaseApp);
-
+  var history = useHistory();
+  
+  
   const FIREBASE_AUTH_ERRORS = {
     "auth/wrong-password": `Invalid email/password`,
     "auth/user-not-found": `No user found for provided email`,
     "auth/email-already-in-use": "Email already register, do please login",
   };
+  
 
+   var saveUser = res => {
+         localStorage.setItem(APP_USER, JSON.stringify(res))
+         setUser(res)
+         history.push("/products")
+   }
+
+   
   var doLogin = (email, password) => {
     clearError();
     signInWithEmailAndPassword(auth, email, password)
       .then((res) => {
-        setUser(res.user);
+        saveUser(res.user)
         console.log(":: DO Login :: SUCCESS", res);
       })
       .catch((error) => {
@@ -40,7 +54,7 @@ var UserProvider = ({ children }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((res) => {
         console.log(":: DO SINGUP :: SUCCESS", res);
-        setUser(res.user);
+        saveUser(res.user);
       })
       .catch((error) => {
         var message = FIREBASE_AUTH_ERRORS[error.code];

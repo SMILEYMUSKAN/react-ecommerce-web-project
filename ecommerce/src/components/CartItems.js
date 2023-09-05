@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { AppContext } from "../context/AppProvider";
 import CartDetails from "./CartItemsDetails";
+import PageLink from "./PageLinks";
+
 
 class CartItems extends Component {
   render() {
@@ -19,9 +21,11 @@ class CartItems extends Component {
                 <h1 className="text-lg font-semibold mt-4">
                   Total : ${totalCartPrice}{" "}
                 </h1>
-                <button className="bg-slate-700 rounded px-2 py-2 mt-5 text-white hover:bg-slate-900">
+                  <PageLink to="/checkout">
+                <button  className="bg-slate-700 rounded px-2 py-2 mt-5 text-white hover:bg-slate-900">
                   Proceed to checkout
                 </button>
+                </PageLink>
               </div>
             ) : (
               <p className="text-center mt-8 italic text-lg">

@@ -7,6 +7,7 @@ var LogOut = () => {
 
   useEffect(() => {
     LogOut();
+    localStorage.clear()
   }, []);
   return null;
 };
