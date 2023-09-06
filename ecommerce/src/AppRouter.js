@@ -6,6 +6,16 @@ import AuthenticationView from "./components/AthenticationView";
 import LogOut from "./components/LogOut";
 import CartItems from "./components/CartItems";
 import CheckOut from "./components/CheckOut";
+import OrderHistory from "./components/OrderHistory";
+import { useUserContext } from "./context/UserProvider";
+import { Redirect } from "react-router-dom";
+
+var AuthRoute = (Component) => {
+  var { user } = useUserContext();
+  return () => {
+    return user ? <Component /> : <Redirect to="/login" />;
+  };
+};
 
 var AppRouter = () => {
   return (
@@ -26,7 +36,8 @@ var AppRouter = () => {
         <Route path="/product/:id" component={ProductView} />
         <Route path="/logout" component={LogOut} />
         <Route path="/cart" component={CartItems} />
-        <Route path="/checkout" component={CheckOut} />
+        <Route path="/checkout" component={AuthRoute(CheckOut)} />
+        <Route path="/history" component={AuthRoute(OrderHistory)} />
       </Switch>
     </div>
   );

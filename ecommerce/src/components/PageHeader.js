@@ -6,26 +6,32 @@ var PageHeader = () => {
   var { user } = useUserContext();
   var { cartCount } = useAppContext();
   return (
-    <div className="bg-slate-900 p-2">
-      <header className="flex justify-between">
+    <div className="bg-slate-900 p-2  ">
+      <header className="flex justify-between  w-full">
         <PageLink to="/">
-          <p className="m-2 text-white italic text-2xl">CartFairy</p>
+          <p className="m-2 text-white italic text-2xl ">CartFairy</p>
         </PageLink>
 
-        <nav className="flex  gap-4 m-2 text-white italic hover:pointer ">
-          <div className="hover:text-slate-400">
+        <nav className="flex  gap-4  text-white italic hover:pointer flex-wrap  m-2">
+          <div>
             <PageLink to="/products">Products</PageLink>
           </div>
           {user ? (
-            <div>
-              {user.email} <PageLink to="/logout">Logout</PageLink>
-            </div>
+            <>
+              {user.email}{" "}
+              <div>
+                <PageLink to="/logout">Logout</PageLink>
+              </div>
+              <div>
+                <PageLink to="/history">Orders</PageLink>
+              </div>
+            </>
           ) : (
             <>
-              <div className="hover:text-slate-400">
+              <div>
                 <PageLink to="/login">Login</PageLink>
               </div>
-              <div className="hover:text-slate-400">
+              <div>
                 <PageLink to="/signUp">Sign Up</PageLink>
               </div>
             </>

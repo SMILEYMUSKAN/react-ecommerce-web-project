@@ -1,7 +1,8 @@
 var UIButton = (props) => {
     return (
       <button
-        className="bg-white  text-center  text-slate-900 rounded italic w-32 p-3 mt-10 ml-20 mb-4"
+      disabled
+      className="w-60 bg-white italic rounded p-2 mt-5 disabled:bg-slate-800"
         {...props}
       >
         {props.children}

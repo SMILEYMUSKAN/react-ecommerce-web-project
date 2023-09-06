@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { useUserContext } from "../context/UserProvider";
 import UITextField from "./UiTextField";
 import UIButton from "./UIButton";
+import { Redirect } from "react-router-dom";
+
 
 var AuthenticationView = ({ isLogin }) => {
   var [email, setEmail] = useState("");
   var [password, setPassword] = useState("");
   var title = isLogin ? "Login" : "SignUp";
-  var { doLogin, doSignUp, error, clearError } = useUserContext();
+  var { doLogin, doSignUp, error, clearError, user } = useUserContext();
 
   var HandleAuthentication = (event) => {
     event.preventDefault();
@@ -17,6 +19,9 @@ var AuthenticationView = ({ isLogin }) => {
   useEffect(() => {
     clearError();
   }, [isLogin]);
+
+
+  if(user) return <Redirect to="/" />
 
   return (
     <div className="bg-slate-900 max-w-lg mt-4 flex flex-col items-center justify-start mx-auto rounded">
@@ -47,7 +52,7 @@ var AuthenticationView = ({ isLogin }) => {
           }}
           className="p-2 w-72 text-center italic rounded bg-white text-slate-900"
         />
-        <UIButton>{title}</UIButton>
+        <button className="bg-white  text-center  text-slate-900 rounded italic w-32 p-3 mt-10 ml-20 mb-4">{title}</button>
       </form>
     </div>
   );
