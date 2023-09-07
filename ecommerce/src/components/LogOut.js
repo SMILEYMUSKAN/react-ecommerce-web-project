@@ -9,6 +9,7 @@ var LogOut = () => {
     LogOut();
     localStorage.clear()
   }, []);
+  
   return null;
 };
 

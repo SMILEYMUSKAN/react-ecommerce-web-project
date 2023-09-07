@@ -51,11 +51,17 @@ var AppProvider = ({ children }) => {
     totalCartPrice = totalCartPrice + product.totalPrice;
   });
 
+    var clearCart = () => {
+      setCartItems({})
+    }
+    
   var productById = {};
   productList.forEach((product) => {
     productById[product.id] = product;
 
   });
+
+ 
 
   
 
@@ -71,6 +77,7 @@ var AppProvider = ({ children }) => {
         cartItems,
         productById,
         totalCartPrice,
+        clearCart
       }}
     >
       {children}

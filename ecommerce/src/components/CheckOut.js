@@ -8,7 +8,7 @@ import { addDoc, collection } from "firebase/firestore";
 var CheckOut = () => {
   var { user } = useUserContext();
   var [address, setAddress] = useState("");
-  var { allCartItems, totalCartPrice } = useAppContext();
+  var { allCartItems, totalCartPrice, clearCart} = useAppContext();
 
   var SubmitHandler = (event) => {
     event.preventDefault();
@@ -31,11 +31,17 @@ var CheckOut = () => {
       totalCartPrice: totalCartPrice,
       address,
       products,
+      orderPlaced : (new Date()).toLocaleString()
     };
 
+
     addDoc(collection(database, "orderHistory"), saveOrder)
-      .then((docRef) => console.log(":: SAVE ORDER SUCCCESS", docRef))
+      .then((docRef) => {
+        console.log(":: SAVE ORDER SUCCCESS", docRef)
+        clearCart()
+      })
       .catch((error) => console.log(":: ERROR ::", error));
+
   };
 
   return (
