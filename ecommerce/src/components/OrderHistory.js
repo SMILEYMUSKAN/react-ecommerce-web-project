@@ -8,6 +8,31 @@ var OrderHistory = () => {
   var [loading, setLoading] = useState(true);
   var { user } = useUserContext()
 
+  /*
+   Using Query [ or ] we can also use sort method on array to sord the orders by its orderPlaced date with weightage logic,
+
+   ex :-
+
+   useEffect(() => {
+    getDocs(collection(database, "orderHistory"))
+      .then((dbCollection) => {
+        var ordersInDB = [];
+        dbCollection.forEach((doc) => {
+          var orderData = doc.data();
+          ordersInDB.push({ ...orderData, id: doc.id });
+        });
+        setOrders(ordersInDB.sort((firstValue, secondValue) => firstValue.orderPlaced > secondValue.orderPlaced ? 1 : -1));
+        setLoading(false);
+        console.log(
+          ordersInDB,
+          ":: OrderHistory -> useEffect -> dbCollection -> ordersInDB ::",
+          user.email
+        );
+      })
+      .catch(console.log);
+  }, []); 
+  */
+
   var ordersCollection = collection(database, "orderHistory")
   var orderQuery       = query(
     ordersCollection,
