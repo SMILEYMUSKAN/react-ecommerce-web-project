@@ -1,13 +1,22 @@
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { database } from "../firebase";
+import { useUserContext } from "../context/UserProvider";
 
 var OrderHistory = () => {
   var [orders, setOrders] = useState([]);
   var [loading, setLoading] = useState(true);
+  var { user } = useUserContext()
+
+  var ordersCollection = collection(database, "orderHistory")
+  var orderQuery       = query(
+    ordersCollection,
+    where("email", "==", user.email),
+    orderBy("orderPlaced", "desc")
+  )
 
   useEffect(() => {
-    getDocs(collection(database, "orderHistory"))
+    getDocs( orderQuery )
       .then((dbCollection) => {
         var ordersInDB = [];
         dbCollection.forEach((doc) => {
@@ -18,7 +27,8 @@ var OrderHistory = () => {
         setLoading(false);
         console.log(
           ordersInDB,
-          ":: OrderHistory -> useEffect -> dbCollection -> ordersInDB ::"
+          ":: OrderHistory -> useEffect -> dbCollection -> ordersInDB ::",
+          user.email
         );
       })
       .catch(console.log);
