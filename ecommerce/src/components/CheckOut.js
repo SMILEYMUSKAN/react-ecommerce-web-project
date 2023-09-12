@@ -4,11 +4,13 @@ import UIButton from "./UIButton";
 import { useAppContext } from "../context/AppProvider";
 import { database } from "../firebase";
 import { addDoc, collection } from "firebase/firestore";
+import { useHistory } from "react-router-dom";
 
 var CheckOut = () => {
   var { user } = useUserContext();
   var [address, setAddress] = useState("");
   var { allCartItems, totalCartPrice, clearCart} = useAppContext();
+  var history = useHistory()
 
   var SubmitHandler = (event) => {
     event.preventDefault();
@@ -38,9 +40,11 @@ var CheckOut = () => {
     addDoc(collection(database, "orderHistory"), saveOrder)
       .then((docRef) => {
         console.log(":: SAVE ORDER SUCCCESS", docRef)
-        clearCart()
+        clearCart();
+        history.push("/history")
       })
       .catch((error) => console.log(":: ERROR ::", error));
+
 
   };
 
