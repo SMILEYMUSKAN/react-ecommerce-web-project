@@ -1,52 +1,87 @@
+import { useEffect, useState } from "react";
 import { useAppContext } from "../context/AppProvider";
+import LoadingSpinner from "./Loader";
 
-var ProductView = ({ match }) => {
-  var {
+const ProductView = ({ match }) => {
+  const {
     params: { id },
   } = match;
-  var { productById, HandleAddToCart, cartItems } = useAppContext();
-  var product = productById[id];
 
-  if (!product) return <div>Product Not Found!</div>;
-  var { title, price, description, images } = product;
-  var [firstProductImg] = images;
+  const { productById, HandleAddToCart, cartItems } = useAppContext();
+  const product = productById[id];
 
-  var addToCart = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timeoutId);
+  }, [id]);
+
+  if (!product) return;
+
+  const { title, price, description, images } = product;
+  const [firstProductImg] = images;
+
+  const addToCart = () => {
     HandleAddToCart(product);
   };
 
-  var cartProduct = cartItems[id];
+  const cartProduct = cartItems[id];
 
   return (
-    <div className="container mx-auto px-4 py-6 border">
-      <div className="flex gap-10">
-        <img src={firstProductImg} alt={title} className="w-80 rounded-lg " />
-        <div className="flex flex-col gap-3">
-          <h1 className="font-semibold italic text-2xl ">
-            {title} | {cartProduct ? cartProduct.quantity : 0}
-          </h1>
-
-          <p className="italic text-lg">{description}</p>
-          <p className="font-semibold italic text-2xl">$ {price}</p>
-          <button
-            onClick={addToCart}
-            className="bg-slate-700 rounded px-2 py-2 mt-5 text-white hover:bg-slate-900"
-          >
-            Add To Cart
-          </button>
+    <div className="flex flex-col gap-8 mx-auto px-4 py-6">
+      {loading ? (
+        <div className="flex justify-center items-center">
+          <LoadingSpinner />
         </div>
-      </div>
-      <div className="flex ">
-        {images.map((imagesUrl) => (
-          <div key={imagesUrl}>
-            <img
-              src={imagesUrl}
-              alt="Sorry! Product Image Unavaiable"
-              className="w-1/2 mt-8 rounded"
-            />
+      ) : (
+        <>
+          <div className="flex gap-10 mt-4">
+            <div className="w-96 flex items-center justify-center">
+              <img
+                src={firstProductImg}
+                alt={title}
+                className="h-72 rounded-lg"
+              />
+            </div>
+            <div className="flex flex-col gap-3 flex-1">
+              <h1 className="font-semibold italic text-2xl">
+                {title} | {cartProduct ? cartProduct.quantity : 0}
+              </h1>
+
+              <p className="italic text-lg">{description}</p>
+              <p className="font-semibold italic text-2xl text-red-600">
+                $ {price}
+              </p>
+              <button
+                onClick={addToCart}
+                className="bg-slate-700 rounded px-2 py-2 mt-5 text-white hover:bg-slate-900">
+                Add To Cart
+              </button>
+            </div>
           </div>
-        ))}
-      </div>
+          <div className="flex w-full items-center justify-center">
+            {images.length === 1 ? null : (
+              <>
+                {images.map((imagesUrl) => (
+                  <div
+                    key={imagesUrl}
+                    className="w-96 flex items-center justify-center">
+                    <img
+                      src={imagesUrl}
+                      alt="Sorry! Product Image Unavailable"
+                      className="h-72 rounded"
+                    />
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

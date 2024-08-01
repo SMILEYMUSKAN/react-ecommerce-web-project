@@ -10,7 +10,7 @@ class CartDetails extends Component {
         : `${quantity} x $${price} = $${quantity * price}`;
 
     return (
-      <div className="flex items-center mb-4 gap-4 border-b-2 border-slate-500">
+      <div className="flex items-center mb-4 gap-4 border-b-2 border-slate-500 pb-2">
         <img src={thumbnail} className="w-24 rounded" />
         <div className="flex-1">
           <Link to={`/product/${id}`} className="text-xl font-semibold">
@@ -20,7 +20,6 @@ class CartDetails extends Component {
           <p>Price : {totalValue}</p>
           <p>Quantity : {quantity}</p>
         </div>
-        {console.log(title, "I'M title FROM CartDetails ")}
       </div>
     );
   }

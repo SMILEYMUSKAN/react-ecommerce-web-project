@@ -21,7 +21,8 @@ var AppRouter = () => {
   return (
     <div>
       <Switch>
-        <Route exact path="/" component={Home} />
+        {/* <Route exact path="/" component={Home} /> */}
+        <Route exact path="/" component={ProductList} />
         <Route
           path="/login"
           render={(routerProps) => (
@@ -32,7 +33,7 @@ var AppRouter = () => {
           path="/signUp"
           render={(routerProps) => <AuthenticationView {...routerProps} />}
         />
-        <Route exact path="/products" component={ProductList} />
+        {/* <Route exact path="/products" component={ProductList} /> */}
         <Route path="/product/:id" component={ProductView} />
         <Route path="/logout" component={LogOut} />
         <Route path="/cart" component={CartItems} />
